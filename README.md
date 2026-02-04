@@ -123,7 +123,7 @@ All data is stored locally or via browser sync storage.
 ## Installation (Developer Mode)
 
 1. Clone the repository:
-   git clone https://github.com/your-username/anti-porn-extension.git
+   git clone https://github.com/AhmedIdrissSaidi/anti-porn-extension.git
 
 2. Open your browser and go to:
    chrome://extensions
