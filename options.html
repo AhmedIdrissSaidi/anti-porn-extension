@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Anti-Porn Settings</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+      background: linear-gradient(135deg, #1a0a0a 0%, #2d1414 50%, #1a0a0a 100%);
+      width: 550px;
+      min-height: 600px;
+      padding: 0;
+      position: relative;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #8b0000 0%, #660000 100%);
+      color: white;
+      padding: 16px 24px;
+      text-align: center;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 12px rgba(139, 0, 0, 0.4);
+    }
+
+    .header-left {
+      flex: 1;
+    }
+
+    .header h1 {
+      font-size: 20px;
+      margin-bottom: 4px;
+    }
+
+    .header-subtitle {
+      font-size: 11px;
+      opacity: 0.95;
+    }
+
+    .header-panic {
+      padding: 8px 16px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 2px solid rgba(255, 255, 255, 0.4);
+      border-radius: 8px;
+      color: white;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .header-panic:hover:not(:disabled) {
+      background: rgba(0, 0, 0, 0.5);
+      border-color: rgba(255, 255, 255, 0.6);
+      box-shadow: 0 0 12px rgba(255, 107, 107, 0.6);
+    }
+
+    .header-panic.active {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+      border-color: #ff8787;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    .header-panic:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .nav-tabs {
+      display: flex;
+      background: #1f1f1f;
+      border-bottom: 2px solid #8b0000;
+    }
+
+    .nav-tab {
+      flex: 1;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      border: none;
+      background: #1f1f1f;
+      font-size: 12px;
+      font-weight: 600;
+      color: #999;
+      transition: all 0.2s;
+    }
+
+    .nav-tab.active {
+      color: #ff6b6b;
+      background: #2d1414;
+      border-bottom: 2px solid #8b0000;
+    }
+
+    .nav-tab:hover {
+      background: #2a2a2a;
+      color: #ccc;
+    }
+
+    .page {
+      display: none;
+      padding: 20px;
+      padding-bottom: 40px;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      border: 1px solid #3a3a3a;
+    }
+
+    .card-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #f0f0f0;
+    }
+
+    .card-subtitle {
+      font-size: 11px;
+      color: #999;
+      margin-bottom: 10px;
+      line-height: 1.4;
+    }
+
+    .input-group {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 8px 12px;
+      border: 2px solid #3a3a3a;
+      border-radius: 8px;
+      font-size: 12px;
+      background: #1a1a1a;
+      color: #f0f0f0;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #8b0000;
+      box-shadow: 0 0 8px rgba(139, 0, 0, 0.4);
+    }
+
+    button {
+      padding: 8px 14px;
+      border: none;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #8b0000 0%, #660000 100%);
+      color: white;
+      box-shadow: 0 2px 8px rgba(139, 0, 0, 0.3);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: linear-gradient(135deg, #a00000 0%, #770000 100%);
+      box-shadow: 0 4px 12px rgba(139, 0, 0, 0.5);
+    }
+
+    .btn-secondary {
+      background: #3a3a3a;
+      color: #ccc;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: #4a4a4a;
+    }
+
+    .btn-danger {
+      background: #2a1a1a;
+      color: #ff6b6b;
+      border: 1px solid #8b0000;
+    }
+
+    .btn-danger:hover:not(:disabled) {
+      background: #3a2020;
+      border-color: #a00000;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .list-container {
+      margin-top: 10px;
+      max-height: 130px;
+      overflow-y: auto;
+      border: 1px solid #3a3a3a;
+      border-radius: 8px;
+      background: #1a1a1a;
+    }
+
+    .list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 10px;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    .list-item:last-child {
+      border-bottom: none;
+    }
+
+    .item-text {
+      font-family: monospace;
+      font-size: 11px;
+      color: #ccc;
+    }
+
+    .btn-delete {
+      padding: 3px 8px;
+      font-size: 10px;
+      background: #2a1a1a;
+      color: #ff6b6b;
+      border: 1px solid #660000;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 20px;
+      color: #666;
+      font-size: 11px;
+    }
+
+    .pending-deletion {
+      background: #2a1f1a;
+      border: 1px solid #8b6914;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pending-info {
+      flex: 1;
+    }
+
+    .pending-item {
+      font-family: monospace;
+      font-size: 11px;
+      font-weight: 600;
+      color: #ffb366;
+    }
+
+    .pending-time {
+      font-size: 10px;
+      color: #cc9966;
+      margin-top: 4px;
+    }
+
+    .pending-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    /* Commit Mode */
+    .commit-card {
+      border: 2px solid #8b0000;
+      box-shadow: 0 0 12px rgba(139, 0, 0, 0.3);
+    }
+
+    .commit-lock-icon {
+      font-size: 40px;
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    .commit-button {
+      width: 100%;
+      padding: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #8b0000 0%, #660000 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(139, 0, 0, 0.4);
+    }
+
+    .commit-button:disabled {
+      opacity: 1;
+      background: #3a3a3a;
+      color: #666;
+      box-shadow: none;
+    }
+
+    .commit-progress {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      background: rgba(255, 107, 107, 0.4);
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    .commit-text {
+      position: relative;
+      z-index: 1;
+    }
+
+    .warning-box {
+      background: #2a1f1a;
+      border: 1px solid #8b6914;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 11px;
+      color: #ffb366;
+      line-height: 1.4;
+      margin-top: 10px;
+    }
+
+    .success-box {
+      background: #1a2a1a;
+      border: 1px solid #2d5a2d;
+      border-radius: 8px;
+      padding: 10px;
+      font-size: 11px;
+      color: #88cc88;
+      line-height: 1.4;
+      margin-top: 10px;
+    }
+
+    /* Stats Page */
+    .days-clean-circle {
+      width: 200px;
+      height: 200px;
+      margin: 20px auto;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #8b0000 0%, #660000 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 24px rgba(139, 0, 0, 0.5);
+    }
+
+    .days-number {
+      font-size: 60px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .days-label {
+      font-size: 14px;
+      color: white;
+      opacity: 0.9;
+      margin-top: 4px;
+    }
+
+    .relapse-button {
+      width: 100%;
+      padding: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 20px;
+      box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+    }
+
+    .relapse-button:hover:not(:disabled) {
+      background: linear-gradient(135deg, #ff8787 0%, #ff6b6b 100%);
+      box-shadow: 0 6px 16px rgba(255, 107, 107, 0.5);
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    .stat-row:last-child {
+      border-bottom: none;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: #999;
+    }
+
+    .stat-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: #f0f0f0;
+    }
+
+    /* Panic Button Inside Protection */
+.panic-button-large {
+  width: 120px;
+  height: 120px;
+  margin: 20px auto;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #b8860b 0%, #daa520 100%);
+  color: white;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(184, 134, 11, 0.4);
+  transition: all 0.3s;
+  display: block;
+}
+
+.panic-button-large:hover {
+  transform: scale(1.05);
+  box-shadow: 0 12px 32px rgba(184, 134, 11, 0.5);
+}
+
+.panic-button-large.active {
+  background: linear-gradient(135deg, #8b0000 0%, #a00000 100%);
+  box-shadow: 0 8px 24px rgba(139, 0, 0, 0.6);
+}
+
+.days-clean-circle {
+  width: 200px;
+  height: 200px;
+  margin: 20px auto;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.6),
+    inset 0 0 40px rgba(139, 0, 0, 0.1),
+    0 0 0 4px #8b0000;
+  border: 3px solid #8b0000;
+}
+
+.days-number {
+  font-size: 64px;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 2px 12px rgba(139, 0, 0, 0.5);
+}
+
+.days-label {
+  font-size: 14px;
+  color: #cccccc;
+  opacity: 0.9;
+  margin-top: 6px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.relapse-button {
+  width: 100%;
+  padding: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #8b0000 0%, #a00000 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.stat-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.stat-row:last-child {
+  border-bottom: none;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: #888888;
+  letter-spacing: 0.3px;
+}
+
+.stat-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.indicator-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #0a0a0a;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #2a2a2a;
+}
+
+.indicator-label {
+  font-size: 12px;
+  color: #888888;
+}
+
+.indicator-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.warning-box {
+  background: #2a1a1a;
+  border: 1px solid #4a2a2a;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 12px;
+  color: #ffcccc;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+
+.success-box {
+  background: #1a2a1a;
+  border: 1px solid #2a4a2a;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 12px;
+  color: #ccffcc;
+  line-height: 1.5;
+  margin-top: 10px;
+}
+
+#status {
+  text-align: center;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  display: none;
+  font-weight: 500;
+}
+
+#status.show {
+  display: block;
+}
+
+#status.success {
+  background: #1a2a1a;
+  color: #ccffcc;
+  border: 1px solid #2a4a2a;
+}
+
+#status.error {
+  background: #2a1a1a;
+  color: #ffcccc;
+  border: 1px solid #4a2a2a;
+}
+  
+.header {
+  position: relative;
+}
+
+.brand-logo {
+  position: absolute;
+  left: -8px;              /* moved left */
+  display: flex;
+  align-items: center;
+}
+
+/* KEEP RATIO + BIGGER LOGO */
+.brand-logo img {
+  width: 100px;           /* logo size */
+  height: auto;          /* keep aspect ratio */
+  max-height: 100px;     /* safety cap */
+  object-fit: contain;
+  transition: transform .2s ease, filter .2s ease;
+}
+
+.brand-logo:hover img {
+  transform: scale(1.12);
+  filter: drop-shadow(0 0 10px rgba(255,255,255,.25));
+}
+
+/* CENTER TITLE */
+.header-center {
+  margin: 0 auto;
+  text-align: center;
+}
+
+
+
+</style>
+</head>
+<body>
+  <div class="header">
+  <a class="brand-logo" href="https://github.com/AhmedIdrissSaidi" target="_blank"><img src="logo.png" alt="Logo"/></a>
+  <div class="header-center">
+    <h1>Anti-Porn</h1>
+    <div class="header-subtitle">Hardcore Protection v3.1</div>
+  </div>
+  <button class="header-panic" id="headerPanicBtn">⚠️ PANIC MODE</button>
+  </div>
+
+  <div class="nav-tabs">
+    <button class="nav-tab active" data-page="lists">Lists</button>
+    <button class="nav-tab" data-page="protection">Protection</button>
+    <button class="nav-tab" data-page="stats">Stats</button>
+  </div>
+
+  <!-- PAGE: LISTS -->
+  <div id="page-lists" class="page active">
+    
+    <!-- Pending Deletions -->
+    <div class="card" id="pendingDeletionsCard" style="display:none;">
+      <div class="card-title">⏳ Pending Deletions</div>
+      <div id="pendingDeletionsList"></div>
+    </div>
+
+    <!-- Whitelist -->
+    <div class="card">
+      <div class="card-title">⚪ Whitelist (Allowed Sites)</div>
+      <div class="card-subtitle">Fully trusted sites. No scanning (unless Panic active). Cannot whitelist default blocked sites.</div>
+      <div class="input-group">
+        <input type="text" id="whitelistInput" placeholder="Add domain (e.g., youtube.com)">
+        <button id="whitelistAddBtn" class="btn-primary">Add</button>
+      </div>
+      <div class="list-container" id="whitelistList"></div>
+    </div>
+
+    <!-- Gray List -->
+    <div class="card">
+      <div class="card-title">⚫ Gray List (Scan But Allow)</div>
+      <div class="card-subtitle">Sites that load normally but are scanned for keywords. Good for social media (Reddit, Twitter).</div>
+      <div class="input-group">
+        <input type="text" id="grayInput" placeholder="Add domain (e.g., reddit.com)">
+        <button id="grayAddBtn" class="btn-primary">Add</button>
+      </div>
+      <div class="list-container" id="grayList"></div>
+    </div>
+
+    <!-- Blocked Sites -->
+    <div class="card">
+      <div class="card-title">⛔ Blocked Sites</div>
+      <div class="card-subtitle">Sites completely blocked at URL level. Default blocked sites are always active (hidden).</div>
+      <div class="input-group">
+        <input type="text" id="siteInput" placeholder="Add domain (e.g., example.com)">
+        <button id="siteAddBtn" class="btn-primary">Add</button>
+      </div>
+      <div class="list-container" id="siteList"></div>
+    </div>
+
+    <!-- Blocked Keywords -->
+    <div class="card">
+      <div class="card-title">🔍 Blocked Keywords</div>
+      <div class="card-subtitle">Keywords blocked in URLs (smart patterns) and page content. Default keywords are always active (hidden).</div>
+      <div class="input-group">
+        <input type="text" id="kwInput" placeholder="Add keyword">
+        <button id="kwAddBtn" class="btn-primary">Add</button>
+      </div>
+      <div class="list-container" id="kwList"></div>
+    </div>
+
+  </div>
+
+  <!-- PAGE: PROTECTION -->
+  <div id="page-protection" class="page">
+    
+    <!-- Commit Mode -->
+    <div class="card commit-card">
+      <div class="card-title">🔒 Commit Mode</div>
+      <div class="commit-lock-icon" id="commitLockIcon">🔓</div>
+      <div id="commitStatus"></div>
+      <button id="commitButton" class="commit-button">
+        <div class="commit-progress" id="commitProgress"></div>
+        <span class="commit-text" id="commitText">HOLD 5 SECONDS TO COMMIT</span>
+      </button>
+      <div class="warning-box" id="commitWarning" style="display:none;">
+        ⚠️ <strong>WARNING:</strong> Commit Mode is PERMANENT and ONE-WAY. Once activated, all deletions (keywords, blocked sites, gray sites) require escalating time penalties. You get ONE free delete, then penalties: 1 hour, 24 hours, 48 hours, 96 hours, then doubling forever. There is NO recovery. You can always ADD items penalty-free, but deletions are severely restricted. This forces commitment and prevents you from weakening your own protection during moments of weakness.
+      </div>
+      <div class="success-box" id="commitSuccess" style="display:none;">
+        ✓ Committed. Deletion penalties are now active. Protection is permanent.
+      </div>
+    </div>
+
+    <!-- Panic Mode -->
+    <div class="card">
+      <div class="card-title">⚠️ Panic Mode (10 Hours)</div>
+      <button id="panicButtonLarge" class="panic-button-large">ACTIVATE<br>PANIC</button>
+      <div id="panicStatusProtection" style="text-align:center; font-size:11px; color:#999; margin-top:10px;"></div>
+      <div class="card-subtitle" style="margin-top:10px;">
+        <strong>What is Panic Mode?</strong> A 10-hour emergency lockdown with NO early exit. All whitelisted sites are treated as gray (scanned for keywords). Extra aggressive keywords are activated. Use when you feel urges and need maximum protection. Cannot be deactivated once started. Counts as a panic event in your statistics.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- PAGE: STATS -->
+  <div id="page-stats" class="page">
+    
+    <div class="card">
+      <div class="days-clean-circle">
+        <div class="days-number" id="daysClean">0</div>
+        <div class="days-label">Days Clean</div>
+      </div>
+      <button id="relapseButton" class="relapse-button">RELAPSE (Reset Streak)</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Statistics</div>
+      <div class="stat-row">
+        <span class="stat-label">Blocked Attempts Today</span>
+        <span class="stat-value" id="blockedToday">0</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-label">Panic Activations</span>
+        <span class="stat-value" id="panicActivations">0</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="status"></div>
+
+  <script src="options.js"></script>
+</body>
+</html>
