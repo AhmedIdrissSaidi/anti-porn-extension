@@ -9,7 +9,13 @@ const MAX_KEYWORDS = 5000;
 const MAX_SITES = 2000;
 
 const DEFAULT_WHITELIST_SITES = [
-  "github.com"
+  "github.com",
+  // Chromium-based extension stores
+  "chromewebstore.google.com",
+  "microsoftedge.microsoft.com",
+  "addons.opera.com",
+  "chrome.google.com",
+  "addons.mozilla.org"
 ];
 
 // SHORT HIGH-RISK KEYWORDS: Smart URL pattern matching only
