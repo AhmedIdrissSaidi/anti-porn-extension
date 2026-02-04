@@ -1,203 +1,166 @@
-# Anti-Porn — Hardcore Content Blocking Extension
+# Anti-Porn – Hardcore Content Blocking Extension
 
-Anti-Porn is a Chromium-based browser extension designed to help users block explicit and adult content, reduce distractions, and maintain long-term self-control while browsing the web.
+Anti-Porn is a Chromium-based browser extension designed to help users block explicit and adult content.
+Unlike simple blockers, Anti-Porn is a commitment-based protection system.
 
-Unlike simple blockers, Anti-Porn introduces a commitment-based protection system that makes impulsive disabling or rule changes intentionally difficult.
+---
 
-This extension is built for users who want serious, intentional protection.
+## Features
 
-✨ Core Features
-🔒 Website Blocking
+### Website Blocking
+- Blocks known adult websites using domain-based rules
+- Uses Declarative Net Request (DNR) for fast and reliable blocking
 
-Blocks known adult websites using domain-based rules
+---
 
-Uses Chrome/Edge Declarative Net Request (DNR) for fast, reliable blocking
+### Keyword-Based Protection
+- Blocks pages based on explicit keywords in URLs
+- Supports user-defined custom keywords
 
-Automatically redirects blocked pages to a custom block screen
+---
 
-🧠 Keyword-Based Protection
+### Content (DOM) Scanning
+- Scans page text to detect explicit content when needed
+- Runs only on allowed or gray-listed sites
 
-Blocks pages based on explicit keywords in URLs
+---
 
-Detects high-intent searches (e.g. search?q=keyword)
+### Site Lists System
+Anti-Porn uses multiple lists to avoid conflicts:
 
-Smart pattern matching to reduce false positives
+- Default Block List  
+  Built-in list of known adult domains (always blocked)
 
-Supports custom user-defined keywords
+- Blocked Sites  
+  User-added domains that are always blocked
 
-Short and risky keywords are handled carefully to avoid accidental blocking of normal sites.
+- Whitelist  
+  Domains that are always allowed (temporarily disabled during Panic Mode)
 
-📄 Content (DOM) Scanning
-
-Scans page text when needed to detect explicit content
-
-Runs only on allowed or “gray” sites
-
-Lightweight and optimized to avoid performance issues
-
-📋 Site Lists System
-
-Anti-Porn uses four clear lists to avoid conflicts:
-
-Default Block List
-Built-in list of known adult domains (always blocked)
-
-Blocked Sites
-User-added domains that are always blocked
-
-Whitelist
-Domains that are always allowed
-(disabled temporarily during Panic Mode)
-
-Gray List
-Allowed sites that are scanned for content
+- Gray List  
+  Allowed sites that are scanned for content (DOM Scanning)
 
 Each site can exist in only one list at a time.
 
-🔐 Commitment Mode
+---
 
-Commitment Mode is the heart of Anti-Porn.
+### Commitment Mode
+Commitment Mode is the core protection feature.
 
-Once enabled:
+When enabled:
+- Makes protection harder to disable
+- Restricts deletion of keywords and sites
 
-Protection becomes harder to bypass
+Activation requires holding the button for 5 seconds to ensure intent.
 
-Rule deletions are restricted
+---
 
-Impulsive disabling is discouraged
-
-Activation requires holding the button for 5 seconds, ensuring intentional choice.
-
-This mode is optional, but strongly recommended.
-
-⏳ Deletion Penalty System
-
+### Deletion Penalty System
 When Commitment Mode is active:
+- The first deletion is free
+- Subsequent deletions require waiting periods
+- Penalty time increases progressively
+- Deletions must be confirmed after the wait time expires
 
-First deletion is free
+This system is designed to slow down impulsive behavior.
 
-Every additional deletion adds a waiting penalty
+---
 
-Penalty time increases progressively
-
-Deletions are queued and must be confirmed after the wait
-
-This system is designed to slow down impulsive decisions.
-
-⚠️ Panic Mode
-
+### Panic Mode
 Panic Mode provides temporary maximum protection.
 
-When activated:
+- Activates for 10 hours
+- Expands keyword scanning
+- Temporarily disables whitelist protection
+- Treats most sites as gray-listed and scanned
 
-Lasts for 10 hours
+Activation requires holding the button for 5 seconds.
 
-Expands keyword scanning
+---
 
-Temporarily disables whitelist protection
-
-Treats most sites as gray (scanning enabled)
-
-Activation requires holding the button for 5 seconds to prevent accidental use.
-
-📊 Statistics & Tracking
-
-Anti-Porn tracks useful local stats:
-
-Days since last relapse
-
-Number of blocked attempts
-
-Panic Mode usage count
-
-Current protection status
+### Statistics and Tracking
+The extension tracks:
+- Days since last relapse
+- Number of blocked attempts
+- Panic Mode usage count
+- Current protection status
 
 All data is stored locally or via browser sync storage.
 
-🧭 How to Use
-🔹 Initial Setup
+---
 
-Install the extension
+## How to Use
 
-Open the settings popup
+### Initial Setup
+1. Install the extension
+2. Open the settings popup
+3. Add keywords or sites you want blocked
+4. Optionally enable Commitment Mode
 
-Add keywords or sites you want blocked
+---
 
-(Optional) Enable Commitment Mode
+### Managing Lists
+- Add or remove keywords and sites from the Lists tab
+- Whitelisted sites are fully allowed unless Panic Mode is active
+- Gray-listed sites are allowed but monitored
 
-🔹 Managing Lists
+---
 
-Add or remove keywords and sites via the Lists tab
+### Using Commitment Mode
+- Hold the Commit button for 5 seconds
+- Deletions may require waiting periods
+- Designed to prevent impulsive changes
 
-Whitelisted sites are fully allowed unless Panic Mode is active
+---
 
-Gray sites are allowed but monitored
+### Using Panic Mode
+- Hold the Panic button for 5 seconds
+- Maximum protection activates immediately
+- Automatically disables after 10 hours
 
-🔹 Commitment Mode
+---
 
-Hold the Commit button for 5 seconds
+## Installation (Developer Mode)
 
-Once enabled, deletions may require waiting
+1. Clone the repository:
+   git clone https://github.com/your-username/anti-porn-extension.git
 
-Designed to prevent impulsive changes
+2. Open your browser and go to:
+   chrome://extensions
 
-🔹 Panic Mode
+3. Enable Developer Mode
 
-Hold the Panic button for 5 seconds
+4. Click "Load unpacked"
 
-Maximum protection is applied immediately
+5. Select the project folder
 
-Automatically disables after 10 hours
+---
 
-🛠️ Installation (Developer Mode)
+## Permissions
 
-Clone the repository:
-
-git clone https://github.com/your-username/anti-porn-extension.git
-
-
-Open your browser:
-
-chrome://extensions
-
-
-Enable Developer Mode
-
-Click Load unpacked
-
-Select the project folder
-
-🔐 Permissions Explained
-Permission	Purpose
-storage	Save settings and stats
-declarativeNetRequest	Block and redirect sites
-declarativeNetRequestFeedback	Monitor blocking results
-scripting	Inject content scanning logic
-<all_urls>	Required to protect all websites
+- storage – save settings and statistics
+- declarativeNetRequest – block and redirect sites
+- declarativeNetRequestFeedback – monitor blocking results
+- scripting – inject content scanning logic
+- all_urls – required to protect all websites
 
 No data is sent to external servers.
 
-🔒 Privacy
+---
 
-No analytics
+## Privacy
+- No analytics
+- No tracking
+- No external servers
+- All data remains on the user’s device
 
-No tracking
+---
 
-No external servers
-
-No data collection
-
-All data stays on the user’s device
-
-⚠️ Disclaimer
-
-This extension is a self-control and productivity tool.
+## Disclaimer
+This extension is a self-control and productivity tool.  
 It does not guarantee complete protection and should be used alongside personal responsibility.
 
-📄 License
+---
 
+## License
 MIT License
-
-📌 GitHub Repository Description (short)
-
-Anti-Porn is a hardcore Chromium extension for blocking adult content using site rules, keyword detection, commitment mode, deletion penalties, and panic protection — built for long-term self-control and focus.
