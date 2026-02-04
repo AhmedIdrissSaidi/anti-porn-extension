@@ -35,11 +35,11 @@ body::before {
 
 .logo-wrap {
   text-align: center;
-  margin-bottom: 35px;
+  margin-bottom: 5px;
 }
 
 .brand-logo {
-  max-width: 120px;
+  max-width: 280px;
   height: auto;
   filter: drop-shadow(0 8px 24px rgba(139, 0, 0, 0.4));
   opacity: 0.95;
