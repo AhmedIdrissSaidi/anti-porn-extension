@@ -1,5 +1,14 @@
 const $ = (id) => document.getElementById(id);
 
+// Mirrored from background.js — used to prevent user from adding duplicate default keywords
+const DEFAULT_KEYWORDS = new Set([
+  "porn","xxx","sex","hentai","nsfw","nude","nudity","proxy",
+  "blowjob","handjob","milf","cams","camgirl","onlyfans",
+  "erotic","escort","fetish","adult","xvideos","pornhub",
+  "explicit","cumshot","slut","anal","oral","masturbate","orgasm","hardcore",
+  "threesome","gangbang","erotica"
+]);
+
 let commitEnabled = false;
 let freeDeleteUsed = false;
 let deletePenaltyLevel = 0;
@@ -204,9 +213,9 @@ function startPanicHold(buttonEl) {
   
   panicHoldTimer = setInterval(() => {
     const elapsed = Date.now() - panicHoldStart;
-    const remaining = Math.max(0, 5 - Math.floor(elapsed / 1000));
+    const remaining = Math.max(0, 3 - Math.floor(elapsed / 1000));
     
-    if (elapsed >= 5000) {
+    if (elapsed >= 3000) {
       clearInterval(panicHoldTimer);
       buttonEl.textContent = originalText;
       activatePanic();
@@ -488,6 +497,16 @@ async function addKeyword() {
     showStatus('Please enter a keyword', true);
     return;
   }
+
+  if (keyword.length < 5) {
+    showStatus('Keyword must be at least 5 characters', true);
+    return;
+  }
+
+  if (DEFAULT_KEYWORDS.has(keyword)) {
+    showStatus('Keyword already exists in default protection list', true);
+    return;
+  }
   
   const data = await getData();
   const keywords = Array.isArray(data.userKeywords) ? data.userKeywords : [];
@@ -634,9 +653,15 @@ async function refreshLists() {
 async function loadStats() {
   const data = await getData();
   
-  const lastRelapse = data.lastRelapse || data.streakStart;
-  const daysClean = Math.floor((Date.now() - lastRelapse) / 86400000);
-  $('daysClean').textContent = daysClean;
+  // Use local date comparison to avoid timezone reset issues
+  const lastRelapseTs = data.lastRelapse || data.streakStart || Date.now();
+  const todayLocal = new Date();
+  const relapseLocal = new Date(lastRelapseTs);
+  // Strip to midnight local time for accurate day count
+  const todayMidnight = new Date(todayLocal.getFullYear(), todayLocal.getMonth(), todayLocal.getDate());
+  const relapseMidnight = new Date(relapseLocal.getFullYear(), relapseLocal.getMonth(), relapseLocal.getDate());
+  const daysClean = Math.floor((todayMidnight - relapseMidnight) / 86400000);
+  $('daysClean').textContent = Math.max(0, daysClean);
   
   const today = new Date().toDateString();
   const blockedToday = (data.blockedAttemptsDate === today) ? (data.blockedAttemptsToday || 0) : 0;

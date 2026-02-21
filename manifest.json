@@ -1,12 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "Anti-Porn",
-  "version": "3.0.2",
+  "name": "Anti-Porn v4.0",
+  "version": "4.0.0",
   "description": "Hardcore content blocking with commitment and penalty system",
   "permissions": [
     "storage",
     "declarativeNetRequest",
-    "declarativeNetRequestFeedback"
+    "declarativeNetRequestFeedback",
+    "tabs"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -16,12 +17,8 @@
   },
   "content_scripts": [
     {
-      "matches": [
-        "<all_urls>"
-      ],
-      "js": [
-        "content.js"
-      ],
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
       "run_at": "document_start",
       "all_frames": true
     }
@@ -32,15 +29,8 @@
   },
   "web_accessible_resources": [
     {
-      "resources": [
-        "blocked.html",
-        "blocked.css",
-        "blocked.js",
-        "logo.png"
-      ],
-      "matches": [
-        "<all_urls>"
-      ]
+      "resources": ["blocked.html", "blocked.css", "blocked.js", "logo.png"],
+      "matches": ["<all_urls>"]
     }
   ],
   "icons": {
